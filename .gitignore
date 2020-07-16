@@ -1,32 +1,19 @@
-# Prerequisites
-*.d
-
-# Compiled Object files
-*.slo
-*.lo
-*.o
-*.obj
-
-# Precompiled Headers
-*.gch
-*.pch
-
-# Compiled Dynamic libraries
-*.so
-*.dylib
-*.dll
-
-# Fortran module files
-*.mod
-*.smod
-
-# Compiled Static libraries
-*.lai
-*.la
-*.a
-*.lib
-
-# Executables
-*.exe
-*.out
+ld
+depend
+*.iml
+.sln
+*.swp
+.DS_Store
+*.dep
+cmake-build-debug/
+.git
+.vscode
+.vs
+/.cproject
+/.project
+/.settings
+/.settings/language.settings.xml
+.history/
+buildresult.txt
+buildresult_all.txt
 *.app
