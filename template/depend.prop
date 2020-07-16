@@ -1,0 +1,21 @@
+# platform [linux]
+platform linux
+
+# vendor [centos]
+vendor centos
+
+# toolchain [gcc4.8.5]
+toolchain gcc4.8.5
+
+# build type [debug | release]
+build_type release
+
+# dependency
+# dependency repo
+repo gitlab.xforwardai.io/xforwardai/xffwcpp
+username xforwardai.ci
+password xforwardai.ci
+# dependency items
+# item1 thirdparty:grpc:1.26.0
+# item2 thirdparty:protobuf:3.8.0
+# item{n} {group}:{name}:{version}
