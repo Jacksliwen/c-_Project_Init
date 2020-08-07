@@ -12,9 +12,9 @@ build_type release
 
 # dependency
 # dependency repo
-repo gitlab.xforwardai.io/xforwardai/xffwcpp
-username xforwardai.ci
-password xforwardai.ci
+repo #your repo
+username #username
+password #password
 # dependency items
 # item1 thirdparty:grpc:1.26.0
 # item2 thirdparty:protobuf:3.8.0
