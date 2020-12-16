@@ -98,7 +98,7 @@ MACRO(INIT_DEPENDENCY_INFO)
     set(version "${vendor}_${toolchain}_${version}")
     set(GIT_CMD "git clone -b ${version} https://${username}:${password}@${repo}/${group}/${name}.git")
     message(STATUS "${GIT_CMD}")
-    execute_process(COMMAND bash "-c" "if [ ! -d ${name} ];then ${GIT_CMD} ;else cd ${name} && if [ `git describe --tags` != ${version} ] || [ `git rev-parse --abbrev-ref HEAD` != ${version} ];then cd .. && rm -rf ${name} && ${GIT_CMD};fi ;fi"
+    execute_process(COMMAND bash "-c" "if [ ! -d ${name} ];then ${GIT_CMD} ;else cd ${name} && if [ \"`git describe --tags`\" != ${version} ] && [ \"`git rev-parse --abbrev-ref HEAD`\" != ${version} ];then cd .. && rm -rf ${name} && ${GIT_CMD};fi ;fi"
                     WORKING_DIRECTORY ${DEPEND_DIR}
                     RESULT_VARIABLE result
                     OUTPUT_VARIABLE output)
