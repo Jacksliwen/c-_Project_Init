@@ -5,6 +5,15 @@ include(cmake/depend_git.cmake)
 #include proto
 #include(proto/proto_template.cmake) 
 
+#version
+EXECUTE_PROCESS(COMMAND git describe --tags
+        TIMEOUT 5
+        OUTPUT_VARIABLE GIT_VERSION
+        OUTPUT_STRIP_TRAILING_WHITESPACE
+        )
+MESSAGE(STATUS "BUILD FROM GIT TAG ${GIT_VERSION}")
+add_definitions(-DBUILD_VERSION=\"${GIT_VERSION}\")
+
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DEXPORT")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O1")
