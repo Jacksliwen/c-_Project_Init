@@ -24,7 +24,16 @@ def main():
         for eachline in alllines:
             a=re.sub(':myproject', project_name, eachline)
             f.writelines(a)
-        f.close()        
+        f.close()  
+
+        f=open(dst_path+'/package.sh','r')
+        alllines=f.readlines()
+        f.close()
+        f=open(dst_path+'/package.sh','w+')
+        for eachline in alllines:
+            a=re.sub(':myproject', project_name, eachline)
+            f.writelines(a)
+        f.close()       
     except Exception as e:
         print e
         raise e

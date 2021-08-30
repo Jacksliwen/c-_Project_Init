@@ -15,6 +15,7 @@ build_type release
 repo #your repo
 username #username
 password #password
+
 # dependency items
 # item1 thirdparty:grpc:1.26.0
 # item2 thirdparty:protobuf:3.8.0

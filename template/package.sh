@@ -3,7 +3,7 @@
 ##最多启动32个进程
 MAX_NUM=32
 PROCESS_NUM=$1
-PROJ_NAME="xfpr"
+PROJ_NAME=:myproject
 WORK_DIR=${PWD}
 
 #1.判断参数是否为数字

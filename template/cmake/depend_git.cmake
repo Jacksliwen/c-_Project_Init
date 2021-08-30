@@ -81,42 +81,27 @@ ENDMACRO()
 
 # init dependency info from ${PROPERTIES}
 MACRO(INIT_DEPENDENCY_INFO)
-  set(suffix "${platform}_^_")
-  if (NOT(${vendor} STREQUAL "default"))
-    string(REPLACE "_^_" "_${vendor}_^_" suffix ${suffix})
-  endif()
-  if (NOT(${toolchain} STREQUAL "default"))
-    string(REPLACE "_^_" "_${toolchain}_^_" suffix ${suffix})
-  endif()
-  string(REPLACE "_^_" "" suffix ${suffix})
-  message("dep file ${suffix}.dep")
-  set(dep_file "${CMAKE_CURRENT_SOURCE_DIR}/${suffix}.dep")
-  file(WRITE ${dep_file} "")
+  #Turn off this advice by setting config variable advice.detachedHead to false
+  execute_process(COMMAND bash "-c" "git config --global advice.detachedHead false")
 
   foreach (item ${items})
     PARSE_ITEM(${item} group name version)
     set(version "${vendor}_${toolchain}_${version}")
     set(GIT_CMD "git clone -b ${version} https://${username}:${password}@${repo}/${group}/${name}.git")
     message(STATUS "${GIT_CMD}")
-    execute_process(COMMAND bash "-c" "if [ ! -d ${name} ];then ${GIT_CMD} ;else cd ${name} && if [ \"`git describe --tags`\" != ${version} ] && [ \"`git rev-parse --abbrev-ref HEAD`\" != ${version} ];then cd .. && rm -rf ${name} && ${GIT_CMD};fi ;fi"
-                    WORKING_DIRECTORY ${DEPEND_DIR}
-                    RESULT_VARIABLE result
-                    OUTPUT_VARIABLE output)
-    message(STATUS "result = ${result} output = ${output}")
+    execute_process(COMMAND bash "-c" "if [ ! -d ${name} ];then ${GIT_CMD} ;else cd ${name} && if [ \"`git rev-parse --abbrev-ref HEAD`\" != ${version} ] && [ \"`git describe --tags`\" != ${version} ];then git checkout -f && git pull && git checkout ${version};fi ;fi"
+                  WORKING_DIRECTORY ${DEPEND_DIR}
+                  RESULT_VARIABLE result
+                  OUTPUT_VARIABLE output)
     if (${result} STREQUAL "0")
-      file(APPEND ${dep_file} "${DEPEND_DIR}/${name}\n")
+        include_directories(${DEPEND_DIR}/${name}/include )
+        message(STATUS "ADD HEADER  PATH: ${DEPEND_DIR}/${name}/include")
+        link_directories(${DEPEND_DIR}/${name}/lib)
+        message(STATUS "ADD LIBRARY PATH: ${DEPEND_DIR}/${name}/lib\n")
+    else()
+        message(STATUS "result = ${result} output = ${output}")
     endif()
   endforeach ()  
-
-  GETLINES(lines ${dep_file})
-  foreach (line ${lines})
-    set(INCLUDE_SEARCH_PATH "${line}/include")
-    set(LINK_SEARCH_PATH "${line}/lib")
-    include_directories(${INCLUDE_SEARCH_PATH})
-    message(STATUS "ADD HEADER PATH:${INCLUDE_SEARCH_PATH}")
-    link_directories(${LINK_SEARCH_PATH})
-    message(STATUS "ADD LIBRARY PATH:${LINK_SEARCH_PATH}")
-  endforeach ()
 
   set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
   set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
@@ -125,7 +110,7 @@ MACRO(INIT_DEPENDENCY_INFO)
   link_directories(${CMAKE_BINARY_DIR}/lib)
 ENDMACRO()
 
-
+set(items "")
 READ_PROPERTIES(properties items)
 INIT_TYPE(properties)
 INIT_PLATFORM_INFO(properties)
